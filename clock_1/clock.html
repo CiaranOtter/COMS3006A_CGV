@@ -104,18 +104,18 @@
 
             console.log(seconds+","+minutes+","+hours);
 
-            theta_s = ((seconds-15)/60)*2*Math.PI;
-            theta_m = ((minutes-15)/60)*2*Math.PI;
-            theta_h = ((hours-3)/12)*2*Math.PI;
+            theta_s = (seconds/60)*2*Math.PI;
+            theta_m = (minutes/60)*2*Math.PI;
+            theta_h = (hours/12)*2*Math.PI;
 
-            let hour_hand_x = 0.5*radius*Math.cos(theta_h)+c_x;
-            let hour_hand_y = 0.5*radius*Math.sin(theta_h)+c_y;
+            let hour_hand_x = 0.5*radius*Math.cos(theta_h-Math.PI/2)+c_x;
+            let hour_hand_y = 0.5*radius*Math.sin(theta_h-Math.PI/2)+c_y;
 
-            let minute_hand_x = 0.7*radius*Math.cos(theta_m)+c_x;
-            let minute_hand_y = 0.7*radius+Math.sin(theta_m)+c_y;
+            let minute_hand_x = radius*Math.cos(theta_m-Math.PI/2)+c_x;
+            let minute_hand_y = radius+Math.sin(theta_m-Math.PI/2)+c_y;
 
-            let second_hand_x = radius*Math.cos(theta_s)+c_x;
-            let second_hand_y = radius*Math.sin(theta_s)+c_y;
+            let second_hand_x = radius*Math.cos(theta_s-Math.PI/2)+c_x;
+            let second_hand_y = radius*Math.sin(theta_s-Math.PI/2)+c_y;
 
             line(c_x, c_y, hour_hand_x, hour_hand_y);
             line(c_x,c_y,minute_hand_x, minute_hand_y);
