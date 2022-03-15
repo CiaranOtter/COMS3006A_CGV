@@ -24,6 +24,7 @@
             graphics = canvas.getContext("2d");
             
             setInterval(draw, 10);
+            // draw();
         }
 
         function clock(r, c_x,c_y) {
@@ -102,20 +103,18 @@
             let minutes = d.getMinutes() + (seconds/60);
             let hours = d.getHours() + (minutes/60);
 
-            console.log(seconds+","+minutes+","+hours);
+            theta_s = (seconds/30*Math.PI) - Math.PI/2;
+            theta_m = (minutes/30*Math.PI) - Math.PI/2;
+            theta_h = (hours/6*Math.PI) - Math.PI/2;
 
-            theta_s = (seconds/60)*2*Math.PI;
-            theta_m = (minutes/60)*2*Math.PI;
-            theta_h = (hours/12)*2*Math.PI;
+            let hour_hand_x = 0.5*radius*Math.cos(theta_h)+c_x;
+            let hour_hand_y = 0.5*radius*Math.sin(theta_h)+c_y;
 
-            let hour_hand_x = 0.5*radius*Math.cos(theta_h-Math.PI/2)+c_x;
-            let hour_hand_y = 0.5*radius*Math.sin(theta_h-Math.PI/2)+c_y;
+            let minute_hand_x = 0.8*radius*Math.cos(theta_m)+c_x;
+            let minute_hand_y = 0.8*radius*Math.sin(theta_m)+c_y;
 
-            let minute_hand_x = radius*Math.cos(theta_m-Math.PI/2)+c_x;
-            let minute_hand_y = radius+Math.sin(theta_m-Math.PI/2)+c_y;
-
-            let second_hand_x = radius*Math.cos(theta_s-Math.PI/2)+c_x;
-            let second_hand_y = radius*Math.sin(theta_s-Math.PI/2)+c_y;
+            let second_hand_x = radius*Math.cos(theta_s)+c_x;
+            let second_hand_y = radius*Math.sin(theta_s)+c_y;
 
             line(c_x, c_y, hour_hand_x, hour_hand_y);
             line(c_x,c_y,minute_hand_x, minute_hand_y);
