@@ -23,7 +23,7 @@ function resetTransform() {
  */
 function circle() {
 	g2.beginPath();
-	g2.arc(-50,-50,100,100, 0, 2*Math.PI);
+	g2.arc(0,0,100,100, 0, 2*Math.PI);
 	g2.closePath();
 	g2.fill()
 }
@@ -48,7 +48,7 @@ function triangle() {
 	g2.lineTo(  0,-50);
 	g2.closePath();
 	g2.fill();
-	//g2.fillPolygon(new int[] {-50,50,0}, new int[] {50,50,-50}, 3);
+	// g2.fillPolygon(new int[] {-50,50,0}, new int[] {50,50,-50}, 3);
 }
 	
 //-----------------------------------------------------------------------------------
@@ -56,38 +56,157 @@ function triangle() {
 function paintComponent() {
 	// TODO Draw the required image, using ONLY the four methods defined above, 
 	// along with g2.fillstyle, g1.scale, g2.translate, and g2.rotate.
-	// REMOVE THE FOLLOWING CODE, which draws a big red X in the upper right quadrant,
-	// then insert your own code to draw the required pictures in the four
-	// quadrants.
+	// // REMOVE THE FOLLOWING CODE, which draws a big red X in the upper right quadrant,
+	// // then insert your own code to draw the required pictures in the four
+	// // quadrants.
+	// // ----------------------------------------------------------------------- //
+	// // The next two line scale the X to be twice the original size
+	// // and then moves the center of the X from (0,0) to (450,150).
+
+
+
+	// // g2.translate(450,150);
+	// g2.scale(2,2);
+
+	// // Set the drawing color to red.
+	// g2.fillStyle="#ff0000";
+
+	// // The next three lines draw a tilted rectanglem centered at (0,0).
+
+	// g2.rotate(Math.PI/4);
+	// g2.scale(1,0.25);
+	// square();
+
+	// // The next two lines undo the previous scale and rotation.  (Can't use reset()
+	// // here becasue that would also eliminate the first translate and scale.)
+
+	// g2.scale(1,4);
+	// g2.rotate(-Math.PI/4);
+
+	// // The next three lines draw a rectangle tilted in the opposite direction.
+
+	// g2.rotate(-Math.PI/4);
+	// g2.scale(1,0.25);
+	// square();
 	// ----------------------------------------------------------------------- //
-	// The next two line scale the X to be twice the original size
-	// and then moves the center of the X from (0,0) to (450,150).
 
-	g2.translate(450,150);
-	g2.scale(2,2);
 
-	// Set the drawing color to red.
-	g2.fillStyle="#ff0000";
+	g2.translate(300,300);
 
-	// The next three lines draw a tilted rectanglem centered at (0,0).
+	g2.save();
 
-	g2.rotate(Math.PI/4);
-	g2.scale(1,0.25);
-	square();
+	g2.translate(-150,-150);
+	draw_Circle_Square();
+	g2.restore();
 
-	// The next two lines undo the previous scale and rotation.  (Can't use reset()
-	// here becasue that would also eliminate the first translate and scale.)
+	g2.save();
 
-	g2.scale(1,4);
-	g2.rotate(-Math.PI/4);
+	g2.translate(150,150);
+	g2.scale(-1,1);
+	draw_Z_shape();
+	g2.restore();
 
-	// The next three lines draw a rectangle tilted in the opposite direction.
+	g2.save();
 
-	g2.rotate(-Math.PI/4);
-	g2.scale(1,0.25);
-	square();
-	// ----------------------------------------------------------------------- //
+	g2.translate(-150,150);
+	g2.scale(0.8,0.8);
+	draw_rectTriangles();
+
+	g2.restore();
+
+	g2.save();
+
+	g2.translate(150,-150);
+	draw_green_flag();
+	g2.restore();
+
+}
+
+function draw_green_flag(){
+	g2.fillStyle = "lime";
+	g2.save();
+
+	g2.translate(-50,0);
+	squashed_triangle(Math.PI/2);
+	g2.translate(100,0);
+	g2.scale(-1,1);
+	squashed_triangle(Math.PI/2);
+	g2.restore();
+
+	g2.translate(0,-50);
 	
+	squashed_triangle(Math.PI);
+	g2.restore();
+}
+
+function squashed_triangle(theta) {
+	g2.save();
+	g2.rotate(theta);
+	console.log(theta);
+	g2.scale(2,1);
+	// g2.translate(0,-50);
+	triangle();
+	g2.restore();
+}
+
+
+function draw_Circle_Square() {
+	g2.fileStyle = "black";
+	g2.save();
+	circle();
+
+	g2.fillStyle = "yellow";
+	square();
+
+	g2.restore();
+}
+
+function draw_rectTriangles() {
+	g2.fillStyle = "blue";
+	g2.save();
+
+	g2.scale(2,1);
+	square();
+	g2.restore();
+	g2.save();
+
+	g2.translate(0,-100);
+	g2.scale(1,-1);
+	triangle();
+	g2.restore();
+
+	g2.save();
+
+	g2.translate(0,100);
+	triangle();
+	g2.restore();
+}
+
+function draw_Z_shape() {
+	g2.fillStyle = "red";
+	g2.save();
+	
+	g2.translate(0,-100);
+	squashed_square();
+	g2.restore();
+	g2.save();
+
+	g2.translate(0,100);
+	squashed_square();
+	g2.restore();
+
+	
+	g2.rotate(Math.PI/4);
+	g2.scale(1.4,1);
+	squashed_square();
+	g2.restore();
+}
+
+function squashed_square(){
+	g2.save();
+	g2.scale(2,0.1);
+	square();
+	g2.restore();
 }
 
 
