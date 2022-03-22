@@ -93,66 +93,43 @@ function paintComponent() {
 
 	g2.translate(300,300);
 
-	g2.save();
-
-	g2.translate(-150,-150);
 	draw_Circle_Square();
-	g2.restore();
-
-	g2.save();
-
-	g2.translate(150,150);
-	g2.scale(-1,1);
 	draw_Z_shape();
-	g2.restore();
-
-	g2.save();
-
-	g2.translate(-150,150);
-	g2.scale(0.8,0.8);
 	draw_rectTriangles();
-
-	g2.restore();
-
-	g2.save();
-
-	g2.translate(150,-150);
 	draw_green_flag();
-	g2.restore();
 
 }
 
 function draw_green_flag(){
-	g2.fillStyle = "lime";
+	
 	g2.save();
-
-	g2.translate(-50,0);
+	g2.fillStyle = "lime";
+	g2.translate(100,-150);
 	squashed_triangle(Math.PI/2);
+
 	g2.translate(100,0);
 	g2.scale(-1,1);
 	squashed_triangle(Math.PI/2);
-	g2.restore();
 
-	g2.translate(0,-50);
-	
+	g2.translate(50,-50);
 	squashed_triangle(Math.PI);
+
 	g2.restore();
 }
 
 function squashed_triangle(theta) {
 	g2.save();
 	g2.rotate(theta);
-	console.log(theta);
 	g2.scale(2,1);
-	// g2.translate(0,-50);
 	triangle();
 	g2.restore();
 }
 
-
 function draw_Circle_Square() {
-	g2.fileStyle = "black";
+	
 	g2.save();
+	g2.fileStyle = "black";
+	g2.translate(-150,-150);
 	circle();
 
 	g2.fillStyle = "yellow";
@@ -162,49 +139,49 @@ function draw_Circle_Square() {
 }
 
 function draw_rectTriangles() {
+	
+	g2.save();
 	g2.fillStyle = "blue";
+	g2.translate(-150,150);
+	g2.scale(0.8,0.8);
 	g2.save();
 
 	g2.scale(2,1);
 	square();
 	g2.restore();
-	g2.save();
 
-	g2.translate(0,-100);
-	g2.scale(1,-1);
-	triangle();
+	rotated_triangle(-100, -1);
+	rotated_triangle(100,1);
+
 	g2.restore();
+}
 
+function rotated_triangle(trans, rotate) {
 	g2.save();
-
-	g2.translate(0,100);
+	g2.translate(0,trans);
+	g2.scale(1,rotate);
 	triangle();
 	g2.restore();
 }
 
 function draw_Z_shape() {
+	g2.save();
 	g2.fillStyle = "red";
-	g2.save();
+	g2.translate(150,150);
+	g2.scale(-1,1);
 	
-	g2.translate(0,-100);
-	squashed_square();
-	g2.restore();
-	g2.save();
+	squashed_square(-100,0,2,0.1);
+	squashed_square(100,0,2,0.1);
+	squashed_square(0, Math.PI/4, 2.8,0.1);
 
-	g2.translate(0,100);
-	squashed_square();
-	g2.restore();
-
-	
-	g2.rotate(Math.PI/4);
-	g2.scale(1.4,1);
-	squashed_square();
 	g2.restore();
 }
 
-function squashed_square(){
+function squashed_square(trans, rotate, scale_x,scale_y){
 	g2.save();
-	g2.scale(2,0.1);
+	g2.translate(0,trans);
+	g2.rotate(rotate);
+	g2.scale(scale_x,scale_y);
 	square();
 	g2.restore();
 }
