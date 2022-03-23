@@ -116,6 +116,9 @@
             else if (colorChoice == 3) {
                 graphics.fillStyle = "blue";
             }
+            else if (colorChoice == 4) {
+                graphics.fillStyle = "yellow";
+            }
             graphics.fillRect(x-20,y-20,40,40);
             graphics.strokeRect(x-20,y-20,40,40);
             
@@ -242,9 +245,15 @@
         }
         addGraphicsContextExtras(graphics);
         installMouseHandler();
+        doClear();
+        document.getElementById("clearButton").onclick = doClear;
+    }
+
+    function doClear() {
         graphics.fillStyle = "white";
         graphics.fillRect(0,0,canvas.width,canvas.height);
     }
+    
     
 </script>
 </head>
@@ -263,7 +272,9 @@
         <option value="1">Red</option>
         <option value="2">Green</option>
         <option value="3">Blue</option>
+        <option value="4">Yellow</option>
     </select>
+    <select id=""
 </p>
 
 <div id="canvasholder">
@@ -273,5 +284,6 @@ Canvas not supported.
 </canvas>
 </div>
 
+<button id ="clearButton">Clear</button>
 </body>
 </html>
