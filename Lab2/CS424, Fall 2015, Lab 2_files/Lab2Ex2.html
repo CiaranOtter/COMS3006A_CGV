@@ -62,6 +62,8 @@
         
         var colorChoice;  // Integer code for the selected color in the "colorChoide"
                           // popup menu.  The value is assigned in doMouseDown.
+
+        let toolChoice;
         
         function doMouseDown(evt) {
                 // This function is called when the user presses a button on the mouse.
@@ -84,6 +86,7 @@
                 document.addEventListener("mouseup", doMouseUp, false);
             }
             colorChoice = Number(document.getElementById("colorChoice").value);
+            toolChoice = Number(document.getElementById("toolChoice").value);
             // TODO: Anything else to do when mouse is first pressed?
         }
         
@@ -106,22 +109,54 @@
                 
             if (colorChoice == 0) {
                 graphics.fillStyle = randomColorString();
+                graphics.strokeStyle = randomColorString();
             }
             else if (colorChoice == 1) {
                 graphics.fillStyle = "red";
+                graphics.strokeStyle = "red";
             }
             else if (colorChoice == 2) {
                 graphics.fillStyle = "green";
+                graphics.strokeStyle = "green";
             }
             else if (colorChoice == 3) {
                 graphics.fillStyle = "blue";
+                graphics.strokeStyle = "blue";
             }
             else if (colorChoice == 4) {
                 graphics.fillStyle = "yellow";
+                graphics.strokeStyle = "yellow";
+            } else if (colorChoice == 5) {
+                graphics.fillStyle = "black";
+                graphics.strokeStyle = "black";
             }
-            graphics.fillRect(x-20,y-20,40,40);
-            graphics.strokeRect(x-20,y-20,40,40);
             
+            graphics.lineWidth = 1;
+            switch (toolChoice) {
+                case (0):
+                    graphics.fillRect(x-20,y-20,40,40);
+                    graphics.strokeStyle = "black";
+                    graphics.strokeRect(x-20,y-20,40,40);
+                    break;
+                case (1):
+                    graphics.lineWidth = 3;
+                    graphics.strokeLine(prevX,prevY,x,y);
+                    break;
+                case (2):
+                    graphics.Star(x,y,40,5);
+                    break;
+                case (3):
+                    graphics.strokeLine(startX,startY,x,y);
+                    break;
+                case (4):
+                    let radius = Math.sqrt((startX-x)*(startX-x) + (startY-y)*(startY-y))
+                    graphics.strokeCircle(startX,startY,radius);
+                    break;
+                case (5):
+                    graphics.lineWidth = 4;
+                    graphics.strokeStyle = "white";
+                    graphics.strokeLine(prevX,prevY,x,y);
+            }
             /*------------------------------------------------------------*/
             
             prevX = x;  // update prevX,prevY to prepare for next call to doMouseMove
@@ -224,6 +259,27 @@
             var color = this.getImageData(x,y,1,1);
             return color.data;
         }
+
+        graphics.Star = function(x,y,radius,spikes) {
+            this.save();
+            this.translate(x,y);
+            graphics.scale(radius,radius);
+            this.beginPath();
+            this.moveTo(0, -1);
+            for (let i =0; i < spikes; i++) {
+                this.rotate(Math.PI/spikes);
+                this.lineTo(0, -0.5);
+
+                this.rotate(Math.PI/spikes);
+                this.lineTo(0, -1);
+            }
+            this.closePath();
+            
+            this.restore();
+            this.fill();
+            this.strokeStyle = "black";
+            this.stroke();
+        }
     }    // end of addGraphicsContextExtras()
     
        
@@ -273,8 +329,17 @@
         <option value="2">Green</option>
         <option value="3">Blue</option>
         <option value="4">Yellow</option>
+        <option value="5">Black</option>
     </select>
-    <select id=""
+    <select id="toolChoice">
+        <option value="0">Square</option>
+        <option value="1">Line</option>
+        <option value="2">Star</option>
+        <option value="3">Radial</option>
+        <option value="4">Centered Circle</option>
+        <option value="5">Eraser</option>
+
+    </select>
 </p>
 
 <div id="canvasholder">

@@ -35,14 +35,152 @@
      *  actions are not necessary in this program, since the function will
      *  only be called once.)
      */
+
+    let colours = ["magenta", "cyan","lime","yellow","red"];
+
     function draw() {
     
         graphics.clearRect(0,0,600,600);        
         // TODO: insert code to draw the image for Exercise 1!
+        addGraphicsContextExtras(graphics);
+        drawGrid();
+        graphics.save();
+        graphics.translate(300,300);
 
+        
+        yellowBars();
+        draw_blue_flag();
+        draw_ovals();
+        draw_heart();
+        graphics.restore();
     }
-    
-    
+
+    function draw_heart() {
+        graphics.save();
+
+        graphics.translate(150,150);
+        graphics.scale(1.2,1.2);
+        graphics.beginPath();
+        Heart();
+
+        graphics.restore();
+    }
+
+    function Heart() {
+        graphics.fillStyle = "red";
+        graphics.lineWidth = 4;
+        graphics.beginPath();
+        graphics.moveTo(0,-75);
+        graphics.bezierCurveTo(-100,-150,-200,-50,0,100);
+        graphics.bezierCurveTo(200,-50,100,-150,0,-75);
+        graphics.closePath();
+        graphics.fill();
+        graphics.stroke();
+        
+    }
+
+    function oval(no) {
+        graphics.save();
+        graphics.translate(0,50*no-100);
+        graphics.fillStyle = colours[no];
+        console.log(colours[no]);
+        graphics.fillOval(0,0,50+(no*20),25);
+        graphics.strokeOval(0,0,50+(no*20),25);
+        graphics.restore();
+    }
+
+    function draw_ovals() {
+        graphics.save();
+        graphics.translate(-150,150);
+        graphics.strokeStyle = "black";
+        graphics.lineWidth = 2;
+        let translation = 0;
+        for (let i =0; i < 5; i++) oval(i);
+
+        graphics.restore();
+    }
+
+    function drawGrid() {
+        graphics.strokeStyle = "grey";
+        graphics.strokeLine(0,300,600,300);
+        graphics.strokeLine(300,0,300,600);
+        graphics.strokeStyle = "black";
+    }
+
+    function yellowBars() {
+        graphics.save();
+        graphics.translate(-150,-150);
+        
+        graphics.scale(0.9,0.9);
+
+        for (let i =150; i >= -150; i -= 300/14){
+            graphics.save();
+            graphics.translate(0,-i);
+            squashedRectangle();
+            graphics.restore();
+        }
+        
+        graphics.restore();
+    }
+
+    function squashedRectangle() {
+        graphics.save();
+        graphics.fillStyle = "orange";
+        // graphics.translate(0,-150);
+        graphics.scale(1,0.035);
+        square();
+        graphics.restore();
+    }
+
+    function triangle() {
+        graphics.beginPath();
+        graphics.moveTo(-50, 50);
+        graphics.lineTo( 50, 50);
+        graphics.lineTo(  0,-50);
+        graphics.closePath();
+        graphics.fill();
+        graphics.stroke();
+    }
+
+    function draw_blue_flag(){
+        
+        graphics.save();
+        graphics.fillStyle = "blue";
+        graphics.strokeStyle = "blue"
+        graphics.translate(150,-150);
+
+        graphics.translate(-50,0);
+        squashed_triangle(Math.PI/2);
+
+        graphics.translate(100,0);
+        graphics.scale(-1,1);
+        squashed_triangle(Math.PI/2);
+
+        graphics.translate(50,-50);
+        squashed_triangle(Math.PI);
+
+        graphics.restore();
+    }
+
+    function squashed_triangle(theta) {
+        graphics.save();
+        graphics.rotate(theta);
+        graphics.scale(2,1);
+        triangle();
+        graphics.restore();
+    }
+
+    function rotated_triangle(trans, rotate) {
+        graphics.save();
+        graphics.translate(0,trans);
+        graphics.scale(1,rotate);
+        triangle();
+        graphics.restore();
+    }
+
+    function square() {
+        graphics.fillRect(0,0,300,300);
+    }
     /**
      * Sets up a transformation in the graphics context so that the canvas will
      * show x-values in the range from left to right, and y-values in the range
@@ -161,6 +299,15 @@
         graphics.getRGB = function(x,y) {
             var color = this.getImageData(x,y,1,1);
             return color.data;
+        }
+
+        graphics.fillRect = function(x,y,width,height) {
+            this.save();
+            this.translate(-(width/2),-(height/2));
+            this.beginPath();
+            this.rect(x,y,width,height);
+            this.fill();
+            this.restore();
         }
     }    // end of addGraphicsContextExtras()
     
