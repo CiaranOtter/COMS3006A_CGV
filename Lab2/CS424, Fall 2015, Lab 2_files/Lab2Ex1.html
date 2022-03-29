@@ -48,25 +48,38 @@
         graphics.translate(300,300);
 
         
+        graphics.save();
+        graphics.translate(-150,-150);
         yellowBars();
+        graphics.restore();
+
+        graphics.save();
+        graphics.translate(150,-150);
         draw_blue_flag();
+        graphics.restore();
+
+        graphics.save();
+        graphics.translate(-150, 150);
         draw_ovals();
+        graphics.restore();
+
+        graphics.save();
+        graphics.translate(150,150);
         draw_heart();
+        graphics.restore();
+
         graphics.restore();
     }
 
     function draw_heart() {
         graphics.save();
-
-        graphics.translate(150,150);
         graphics.scale(1.2,1.2);
-        graphics.beginPath();
         Heart();
-
         graphics.restore();
     }
 
     function Heart() {
+        graphics.save();
         graphics.fillStyle = "red";
         graphics.lineWidth = 4;
         graphics.beginPath();
@@ -76,27 +89,29 @@
         graphics.closePath();
         graphics.fill();
         graphics.stroke();
-        
+        graphics.restore();
     }
 
-    function oval(no) {
+    function oval(index) {
         graphics.save();
-        graphics.translate(0,50*no-100);
-        graphics.fillStyle = colours[no];
-        console.log(colours[no]);
-        graphics.fillOval(0,0,50+(no*20),25);
-        graphics.strokeOval(0,0,50+(no*20),25);
+        graphics.fillStyle = colours[index];
+        graphics.fillOval(0,0,50+index*20,25);
+        graphics.strokeOval(0,0,50+index*20,25);
         graphics.restore();
     }
 
     function draw_ovals() {
         graphics.save();
-        graphics.translate(-150,150);
         graphics.strokeStyle = "black";
         graphics.lineWidth = 2;
         let translation = 0;
-        for (let i =0; i < 5; i++) oval(i);
-
+        for (let i =0; i < 5; i++) {
+            graphics.save();
+            graphics.translate(0,50*i -100)
+            oval(i);
+            graphics.restore();
+        }
+    
         graphics.restore();
     }
 
@@ -109,7 +124,7 @@
 
     function yellowBars() {
         graphics.save();
-        graphics.translate(-150,-150);
+        // graphics.translate(-150,-150);
         
         graphics.scale(0.9,0.9);
 
@@ -126,7 +141,6 @@
     function squashedRectangle() {
         graphics.save();
         graphics.fillStyle = "orange";
-        // graphics.translate(0,-150);
         graphics.scale(1,0.035);
         square();
         graphics.restore();
@@ -146,8 +160,7 @@
         
         graphics.save();
         graphics.fillStyle = "blue";
-        graphics.strokeStyle = "blue"
-        graphics.translate(150,-150);
+        graphics.strokeStyle = "blue";
 
         graphics.translate(-50,0);
         squashed_triangle(Math.PI/2);
@@ -170,9 +183,9 @@
         graphics.restore();
     }
 
-    function rotated_triangle(trans, rotate) {
+    function rotated_triangle(translation, rotate) {
         graphics.save();
-        graphics.translate(0,trans);
+        graphics.translate(0,translation);
         graphics.scale(1,rotate);
         triangle();
         graphics.restore();
