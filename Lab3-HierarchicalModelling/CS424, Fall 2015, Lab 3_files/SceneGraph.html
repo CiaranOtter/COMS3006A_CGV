@@ -23,19 +23,60 @@
     var world;  // A SceneGraphNode representing the entire scene. 
     
     // TODO: Define global variables to represent animated objects in the scene.
-    var rotatingRect;  // (DELETE THIS EXAMPLE)
-    
+    var wheel;
+    var seesawTop;
+    var seesaw;
+    var scaledCircle;
+    // var spoke;
     /**
      *  Builds the data structure that represents the entire picture.
      */
     function createWorld() {
+        
 
-        world = new CompoundObject();  // Root node for the scene graph.
+        let wheelTemp = new CompoundObject();
+        wheelTemp.setColor("black");
+        wheelTemp.add(new TransformedObject(circle));
+        for (let i =0; i < 6; i++)
+            wheelTemp.add(new TransformedObject(line).setRotation((180/6)*i));
+        
+        wheel = new TransformedObject(wheelTemp);
 
-        // TODO: Create objects and add them to the scene graph.
-        rotatingRect = new TransformedObject(filledRect);   // (DELETE THIS EXAMPLE)
-        rotatingRect.setScale(2,2).setColor("red"); 
-        world.add(rotatingRect);
+        let seesawTopTemp = new CompoundObject();
+        seesawTopTemp.add(new TransformedObject(wheel).setScale(1.5,1.5).setTranslation(1.5,0));
+        seesawTopTemp.add(new TransformedObject(wheel).setScale(1.5,1.5).setTranslation(-1.5,0));
+        seesawTopTemp.add(new TransformedObject(filledRect).setScale(3.2,0.2).setColor("red"));
+        seesawTop = new TransformedObject(seesawTopTemp);
+
+        let seesawTemp = new CompoundObject();
+        seesawTemp.add(new TransformedObject(seesawTop));
+        seesawTemp.add(new TransformedObject(filledTriangle).setScale(0.7,2).setTranslation(0,-2));
+
+        seesaw = new TransformedObject(seesawTemp);
+
+
+        world = new CompoundObject();
+        world.add(new TransformedObject(seesaw).setTranslation(0.5,-0.9).setColor("blue"));
+        world.add(new TransformedObject(seesaw).setScale(0.5,0.5).setTranslation(2.5,2).setColor("green"))
+        world.add(new TransformedObject(seesaw).setScale(0.8,0.8).setTranslation(-2,2).setColor("purple"))
+    }   
+
+    function addWheel(dx, dy) {
+        wheel = new CompoundObject();
+
+        for (let i =0; i < 6; i++){
+            let spoke = new TransformedObject(line);
+            spoke.setColor("black");
+            spoke.setScale(1.3,1.3).setRotation((180/6)*i);
+            wheel.add(spoke);
+        }
+
+        scaledCircle = new TransformedObject(circle);
+        scaledCircle.setScale(1.3,1.3).setColor("black");
+
+        wheel.add(scaledCircle);
+        wheel.setTranslation(dx,dy);
+        return wheel;
     }
     
     /**
@@ -46,8 +87,8 @@
         frameNumber++;
 
         // TODO: Update state in preparation for drawing the next frame.
-        rotatingRect.setRotation(frameNumber*0.75); // (DELETE THIS EXAMPLE)
-        
+        wheel.setRotation(frameNumber*0.75);
+        seesawTop.setRotation(frameNumber*0.75);
     }
  
 
@@ -117,6 +158,16 @@
         for (var i = 0; i < this.subobjects.length; i++)
             this.subobjects[i].draw(g);
     }
+
+    CompoundObject.prototype.setRotation = function(angle) {
+        for (var i = 0; i < this.subobjects.length; i++)
+            this.subobjects[i].updateRotation(angle);
+    }
+
+    CompoundObject.prototype.setTranslation = function(dx, dy) {
+        for (var i = 0; i < this.subobjects.length; i++)
+            this.subobjects[i].setTranslation(dx,dy);
+    }
     
     /**
      *  Define a subclass, TransformedObject, of SceneGraphNode that
@@ -155,6 +206,13 @@
            // Set translation mounts.
         this.translateX = dx;
         this.translateY = dy;
+        return this;
+    }
+
+    TransformedObject.prototype.updateRotation = function(angle) {
+        this.rotationInDegrees += angle;
+        console.log("Given angle", angle);
+        console.log("SetAngle",this.rotationInDegrees);
         return this;
     }
     TransformedObject.prototype.doDraw = function(g) {
