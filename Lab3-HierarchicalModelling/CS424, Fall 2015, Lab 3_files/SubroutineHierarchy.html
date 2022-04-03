@@ -29,7 +29,23 @@
     function drawWorld() {
 
         // TODO: Draw the content of the scene.
-        rotatingRect();  // (DELETE THIS EXAMPLE)
+
+        graphics.save();
+        graphics.translate(-2,1.5);
+        graphics.scale(0.8,0.8);
+        SeeSaw("purple");
+        graphics.restore();
+
+        graphics.save();
+        graphics.translate(2.5, 2);
+        graphics.scale(0.6,0.6);
+        SeeSaw("green");
+        graphics.restore();
+
+        graphics.save();
+        graphics.translate(0.5,-0.9);
+        SeeSaw("blue");
+        graphics.restore();
 
     }
     
@@ -51,6 +67,57 @@
         graphics.rotate( (frameNumber*0.75) * Math.PI/180 );
         graphics.scale( 2, 2 );
         filledRect();
+        graphics.restore();
+    }
+
+    function wheel() {
+        graphics.save();
+        graphics.strokeStyle = "black";
+        graphics.scale(1.3,1.3);
+        circle();
+        for (let i =0; i <6; i++){
+            line();
+            graphics.rotate(Math.PI/6);
+        }
+        graphics.restore();
+    }
+
+    function SeeSaw(colour) {
+        graphics.save();
+        graphics.rotate((frameNumber*0.75) * Math.PI/180 );
+        SeeSawTop();        
+        graphics.restore();
+
+        graphics.save();
+        graphics.fillStyle = colour;
+        graphics.translate(0,-2);
+        graphics.scale(0.8,2);
+        filledTriangle(graphics);
+        graphics.restore();
+
+    }
+
+    function SeeSawTop() {
+        graphics.save();
+        
+        graphics.save();
+        graphics.translate(-1.6,0);
+        graphics.rotate((frameNumber*0.75) * Math.PI/180 );
+        wheel();
+        graphics.restore();
+
+        graphics.save();
+        graphics.translate(1.6,0);
+        graphics.rotate((frameNumber*0.75) * Math.PI/180 );
+        wheel();
+        graphics.restore();
+
+        graphics.save();
+        graphics.fillStyle = "red";
+        graphics.scale(3.4,0.2);
+        filledRect();
+        graphics.restore();
+
         graphics.restore();
     }
 
