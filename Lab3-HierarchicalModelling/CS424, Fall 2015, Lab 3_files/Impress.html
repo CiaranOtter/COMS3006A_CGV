@@ -23,40 +23,20 @@
     var world;  // A SceneGraphNode representing the entire scene. 
     
     // TODO: Define global variables to represent animated objects in the scene.
-    var wheel;
-    var seesawTop;
-    var seesaw;
+    var window;
     // var spoke;
     /**
      *  Builds the data structure that represents the entire picture.
      */
     function createWorld() {
-        
-        let wheelTemp = new CompoundObject();
-        wheelTemp.setColor("black");
-        wheelTemp.add(new TransformedObject(circle));
-        for (let i =0; i < 6; i++)
-            wheelTemp.add(new TransformedObject(line).setRotation((180/6)*i));
-        
-        wheel = new TransformedObject(wheelTemp);
+        let windowTemp = new CompoundObject();
+        windowTemp.add(new TransformedObject(rect).setColor("black"));
 
-        let seesawTopTemp = new CompoundObject();
-        seesawTopTemp.add(new TransformedObject(wheel).setScale(1.5,1.5).setTranslation(1.5,0));
-        seesawTopTemp.add(new TransformedObject(wheel).setScale(1.5,1.5).setTranslation(-1.5,0));
-        seesawTopTemp.add(new TransformedObject(filledRect).setScale(3.2,0.2).setColor("red"));
-        seesawTop = new TransformedObject(seesawTopTemp);
-
-        let seesawTemp = new CompoundObject();
-        seesawTemp.add(new TransformedObject(seesawTop));
-        seesawTemp.add(new TransformedObject(filledTriangle).setScale(0.7,2).setTranslation(0,-2));
-
-        seesaw = new TransformedObject(seesawTemp);
+        window = new TransformedObject(windowTemp);
 
 
-        world = new CompoundObject();
-        world.add(new TransformedObject(seesaw).setTranslation(0.5,-0.9).setColor("blue"));
-        world.add(new TransformedObject(seesaw).setScale(0.5,0.5).setTranslation(2.5,2).setColor("green"))
-        world.add(new TransformedObject(seesaw).setScale(0.8,0.8).setTranslation(-2,2).setColor("purple"))
+        world= new CompoundObject();
+        world.add(new TransformedObject(window).setScale(0.5,0.5));
     }   
 
     
@@ -68,8 +48,6 @@
         frameNumber++;
 
         // TODO: Update state in preparation for drawing the next frame.
-        wheel.setRotation(frameNumber*0.75);
-        seesawTop.setRotation(frameNumber*0.75);
     }
  
 
@@ -136,8 +114,11 @@
     }
     CompoundObject.prototype.doDraw = function(g) {
             // Just call the sub-objects' draw() methods.
+            console.log("started drawing comp")
         for (var i = 0; i < this.subobjects.length; i++)
             this.subobjects[i].draw(g);
+
+        console.log("Drew compound object")
     }
     
     /**
@@ -192,6 +173,7 @@
             g.scale(this.scaleX, this.scaleY);
         }
         this.object.draw(g);
+        console.log("Drew transformed object");
         g.restore();
     }
     
