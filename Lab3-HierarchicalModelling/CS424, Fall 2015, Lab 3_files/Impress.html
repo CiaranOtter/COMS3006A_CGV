@@ -23,21 +23,45 @@
     var world;  // A SceneGraphNode representing the entire scene. 
     
     // TODO: Define global variables to represent animated objects in the scene.
-    var window;
+    var wheel;
+    var seesawTop;
+    var seesaw;
+
+    var gardenScene;
+    var kitchenScene;
+    var Scene = [];
     // var spoke;
     /**
      *  Builds the data structure that represents the entire picture.
      */
     function createWorld() {
-        let windowTemp = new CompoundObject();
-        windowTemp.add(new TransformedObject(rect).setColor("black"));
+        
+        let gardenSceneTemp = new CompoundObject();
+        // gardenScene.setColor("black");
+        gardenSceneTemp.add(new TransformedObject(rect).setScale(4,3));
+        gardenSceneTemp.add(new TransformedObject(line).setScale(4,1));
+        gardenSceneTemp.add(new TransformedObject(line).setRotation(90).setScale(3,1));
+        // winow = new TransformedObject(windowTemp);
 
-        window = new TransformedObject(windowTemp);
+        gardenScene = new TransformedObject(gardenSceneTemp);
+
+        let kitcheSceneTemp = new CompoundObject();
+        kitcheSceneTemp.setColor("brown");
+        kitcheSceneTemp.add(new TransformedObject(rect).setScale(4,3));
+
+        kitchenScene = new TransformedObject(kitcheSceneTemp);
 
 
-        world= new CompoundObject();
-        world.add(new TransformedObject(window).setScale(0.5,0.5));
+        Scene[1] = gardenScene;
+        Scene[0] = kitchenScene;
+        updateScene();
     }   
+
+    function updateScene() {
+        world = new CompoundObject();
+        for (let i =0; i < Scene.length; i++)
+            world.add(new TransformedObject(Scene[i]).setScale((i+1)*0.5,(i+1)*0.5));
+    }
 
     
     /**
@@ -48,6 +72,15 @@
         frameNumber++;
 
         // TODO: Update state in preparation for drawing the next frame.
+        gardenScene.setScale(frameNumber*0.01 +1,frameNumber*0.01+1);
+        kitchenScene.setScale(frameNumber*0.01 +1,frameNumber*0.01+1);
+        // console.log(frameNumber)
+        if (frameNumber%100 == 0) {
+            var tempElement = Scene.splice(0,1);
+            Scene = Scene.concat(tempElement);
+            console.log(Scene);
+            updateScene();
+        }
     }
  
 
@@ -114,11 +147,8 @@
     }
     CompoundObject.prototype.doDraw = function(g) {
             // Just call the sub-objects' draw() methods.
-            console.log("started drawing comp")
         for (var i = 0; i < this.subobjects.length; i++)
             this.subobjects[i].draw(g);
-
-        console.log("Drew compound object")
     }
     
     /**
@@ -173,7 +203,6 @@
             g.scale(this.scaleX, this.scaleY);
         }
         this.object.draw(g);
-        console.log("Drew transformed object");
         g.restore();
     }
     
