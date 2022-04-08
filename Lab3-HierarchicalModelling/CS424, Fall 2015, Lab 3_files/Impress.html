@@ -29,7 +29,8 @@
 
     var gardenScene;
     var kitchenScene;
-    var Scene = [];
+    var computerScene;
+    var Scene = new Array();
     // var spoke;
     /**
      *  Builds the data structure that represents the entire picture.
@@ -38,29 +39,49 @@
         
         let gardenSceneTemp = new CompoundObject();
         // gardenScene.setColor("black");
+        gardenSceneTemp.add(new TransformedObject(filledRect).setTranslation(4,-3.5).setScale(16, 4).setColor("red"))
+        gardenSceneTemp.add(new TransformedObject(filledRect).setTranslation(4,3.5).setScale(16,4).setColor("red"))
+        gardenSceneTemp.add(new TransformedObject(filledRect).setTranslation(-3,0).setScale(2,6).setColor("red"))
+        gardenSceneTemp.add(new TransformedObject(filledRect).setTranslation(7,0).setScale(10,6).setColor("red"))
         gardenSceneTemp.add(new TransformedObject(rect).setScale(4,3));
         gardenSceneTemp.add(new TransformedObject(line).setScale(4,1));
         gardenSceneTemp.add(new TransformedObject(line).setRotation(90).setScale(3,1));
+        gardenSceneTemp.add(new TransformedObject(filledRect).setScale(800,10).setTranslation(0,-10).setColor("green"));
+        
         // winow = new TransformedObject(windowTemp);
 
-        gardenScene = new TransformedObject(gardenSceneTemp);
+        gardenScene = new TransformedObject(gardenSceneTemp).setScale(0.25,0.25);
 
         let kitcheSceneTemp = new CompoundObject();
         kitcheSceneTemp.setColor("brown");
         kitcheSceneTemp.add(new TransformedObject(rect).setScale(4,3));
 
-        kitchenScene = new TransformedObject(kitcheSceneTemp);
+        kitchenScene = new TransformedObject(kitcheSceneTemp).setScale(0.25,0.25);
 
+        let computerTemp = new CompoundObject();
+        computerTemp.add(new TransformedObject(rect).setScale(4,3));
 
-        Scene[1] = gardenScene;
-        Scene[0] = kitchenScene;
+        computerScene = new TransformedObject(computerTemp).setScale(0.25,0.25);
+
+        Scene[2] = new TransformedObject(gardenScene).setScale(2,2);
+        Scene[1] = new TransformedObject(kitchenScene).setScale(1,1);
+        Scene[0] = new TransformedObject(computerScene).setScale(0,0);
+        // Scene[3] = new TransformedObject(computerScene).setScale(0.25, 0.25);
+        // Scene[2] = new TransformedObject(gardenScene).setScale(0.01,0.01);
+        // Scene[1] = new TransformedObject(kitchenScene).setScale(0.01,0.01);
+        // Scene[0] = new TransformedObject(computerScene).setScale(0.01,0.01);
+        
         updateScene();
     }   
 
     function updateScene() {
         world = new CompoundObject();
-        for (let i =0; i < Scene.length; i++)
-            world.add(new TransformedObject(Scene[i]).setScale((i+1)*0.5,(i+1)*0.5));
+        console.log(Scene)
+        for (let i = 0; i < Scene.length; i++){
+            console.log(`adding scene ${i} to frame`)
+            world.add(new TransformedObject(Scene[i]));
+        } 
+        
     }
 
     
@@ -70,17 +91,25 @@
      */
     function updateFrame() {
         frameNumber++;
-
+        let scales;
         // TODO: Update state in preparation for drawing the next frame.
-        gardenScene.setScale(frameNumber*0.01 +1,frameNumber*0.01+1);
-        kitchenScene.setScale(frameNumber*0.01 +1,frameNumber*0.01+1);
-        // console.log(frameNumber)
-        if (frameNumber%100 == 0) {
-            var tempElement = Scene.splice(0,1);
-            Scene = Scene.concat(tempElement);
-            console.log(Scene);
-            updateScene();
+        for (let i =0; i < Scene.length; i++){
+            scales = Scene[i].getScale();
+            Scene[i].setScale(scales[0]+0.01+(0.02*i), scales[1]+0.01+(0.02*i))
         }
+        scales = Scene[Scene.length-1].getScale();
+        console.log(scales[0])
+        if (scales[0] >= 8 && scales[0] <= 8.05){
+            console.log("updating")
+            
+            let tempElement = Scene.splice(Scene.length-1, 1);
+            console.log(tempElement[0])
+            Scene.unshift(tempElement[0]);
+            updateScene();
+            Scene[0].setScale(0.01,0.01)
+        }
+
+        // console.log(frameNumber)
     }
  
 
@@ -183,6 +212,10 @@
         this.scaleX = sx;
         this.scaleY = sy;
         return this;
+    }
+
+    TransformedObject.prototype.getScale = function() {
+        return [this.scaleX,this.scaleY]
     }
     TransformedObject.prototype.setTranslation = function(dx,dy) {
            // Set translation mounts.
